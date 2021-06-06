@@ -63,8 +63,8 @@ proc processProjectPath*(self: NimProg, conf: ConfigRef) =
     conf.projectPath = AbsoluteDir canonicalizePath(conf, AbsoluteFile getCurrentDir())
 
 #Simplified handleCmdLine without stdin support and commandLine checks.
-#returns true for succes, false for failure.
-proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_output : string, success : bool] =
+#returns false for succes, true for failure.
+proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_output : string, failure : bool] =
 
   #--stdout:on
   incl(conf.globalOptions, {optStdout}) 
@@ -83,7 +83,7 @@ proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_out
 
   var 
     compilationOutput : string
-    success : bool
+    failure : bool
 
   #In a future version, I could patch in a conf.compilationOutput variable, instead of doing this
   #workaround to capture stdout.
@@ -91,9 +91,9 @@ proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_out
     #try
     if not bool(omni_setjmp(conf.omniJmpBuf)):
       mainCommand(graph)
-      success = true
+      failure = false
     #catch
     else:
-      success = false
+      failure = true
 
-  return (compilationOutput, success)
+  return (compilationOutput, failure)
