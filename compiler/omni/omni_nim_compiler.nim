@@ -34,6 +34,7 @@
 # is omniNimCompile.
 
 include ../nim
+import omni_setjmp
 
 #Like processCmdLineAndProjectPath but without processCmdLine (which would read stdin, blocking
 #execution)
@@ -53,8 +54,9 @@ proc processProjectPath*(self: NimProg, conf: ConfigRef) =
   else:
     conf.projectPath = AbsoluteDir canonicalizePath(conf, AbsoluteFile getCurrentDir())
 
-#Simplified handleCmdLine without stdin support and commandLine checks
-proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) =
+#Simplified handleCmdLine without stdin support and commandLine checks.
+#returns true for succes, false for failure.
+proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : bool =
   let self = NimProg(
     supportsStdinFile: false, #it is true here for normal nim
     processCmdLine: processCmdLine
@@ -62,5 +64,11 @@ proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) =
   self.initDefinesProg(conf, "nim_compiler")
   self.processProjectPath(conf)
   var graph = newModuleGraph(cache, conf)
-  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return
-  mainCommand(graph)
+  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return false
+  #try
+  if not bool(omni_setjmp(conf.omniJmpBuf)):
+    mainCommand(graph)
+    return true
+  #catch
+  else:
+    return false

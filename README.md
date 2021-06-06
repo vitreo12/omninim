@@ -9,7 +9,7 @@ All additional code is prepended with the `#OMNI` comment.
 ## Additions:
 
 1) On failed compilation, do not `quit`, but use `setjmp` and `longjmp` to implement a low-level
-`try` / `catch` mechanism.
+`try` / `catch` mechanism. Check the `compiler/omni` folder for the implementation.
 
 2) Disable `stdin` handling and assign all `conf` options via code.
 
