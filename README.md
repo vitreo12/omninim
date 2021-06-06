@@ -8,12 +8,10 @@ All additional code is prepended with the `#OMNI` comment.
 
 ## Additions:
 
-1) On failed compilation, do not `quit`, but use `setjmp` and `longjmp` to implement a low-level
-`try` / `catch` mechanism. Check the `compiler/omni` folder for the implementation.
+1) On failed compilation, it does not `quit`, but it uses `setjmp` and `longjmp` to implement a low-level
+`try` / `catch` mechanism. Check the `compiler/omni/omni_nim_compiler.nim` folder for the implementation of the `omniNimCompile` function.
 
-2) Disable `stdin` handling and assign all `conf` options via code.
-
-3) Simplified `handleCmdLine` function, called `omniNimCompile`.
+2) Disable `stdin` handling. All `conf` settings need to be manually assigned via code. 
 
 ## License
 
