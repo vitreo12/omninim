@@ -35,6 +35,7 @@
 
 include ../nim
 import omni_setjmp
+import omni_capture_stdout
 
 #Like processCmdLineAndProjectPath but without processCmdLine (which would read stdin, blocking
 #execution)
@@ -56,7 +57,14 @@ proc processProjectPath*(self: NimProg, conf: ConfigRef) =
 
 #Simplified handleCmdLine without stdin support and commandLine checks.
 #returns true for succes, false for failure.
-proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : bool =
+proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_output : string, success : bool] =
+
+  #--stdout:on
+  incl(conf.globalOptions, {optStdout}) 
+
+  #--colors:off
+  excl(conf.globalOptions, {optUseColors})
+
   let self = NimProg(
     supportsStdinFile: false, #it is true here for normal nim
     processCmdLine: processCmdLine
@@ -64,11 +72,21 @@ proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : bool =
   self.initDefinesProg(conf, "nim_compiler")
   self.processProjectPath(conf)
   var graph = newModuleGraph(cache, conf)
-  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return false
-  #try
-  if not bool(omni_setjmp(conf.omniJmpBuf)):
-    mainCommand(graph)
-    return true
-  #catch
-  else:
-    return false
+  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return ("", false)
+
+  var 
+    compilationOutput : string
+    success : bool
+
+  #In a future version, I could patch in a conf.compilationOutput variable, instead of doing this
+  #workaround to capture stdout.
+  captureStdout(compilationOutput):
+    #try
+    if not bool(omni_setjmp(conf.omniJmpBuf)):
+      mainCommand(graph)
+      success = true
+    #catch
+    else:
+      success = false
+
+  return (compilationOutput, success)
