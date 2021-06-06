@@ -405,7 +405,8 @@ To create a stacktrace, rerun compilation with './koch temp $1 <file>', see $2 f
   #OMNI
   omni_longjmp(conf.omniJmpBuf, 1)
   
-  quit 1
+  #OMNI
+  #quit 1
 
 proc handleError(conf: ConfigRef; msg: TMsgKind, eh: TErrorHandling, s: string) =
   if msg >= fatalMin and msg <= fatalMax:
