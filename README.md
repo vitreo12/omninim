@@ -2,7 +2,7 @@
 
 Patched version of the Nim compiler in order to be embedded within the Omni audio DSL.
 
-## NOTES:
+## Notes:
 
 All additional code is prepended with the `#OMNI` comment.
 
