@@ -1,5 +1,4 @@
-
-version = system.NimVersion
+version = "1.4.8"
 author = "Andreas Rumpf & Francesco Cameli"
 description = "Patched Nim compiler to be embedded in the Omni audio DSL."
 license = "MIT"
