@@ -113,9 +113,12 @@ when compileOption("gc", "v2") or compileOption("gc", "refc"):
   # the new correct mark&sweet collector is too slow :-/
   GC_disableMarkAndSweep()
 
+#OMNI
+#[
 when not defined(selftest):
   let conf = newConfigRef()
   handleCmdLine(newIdentCache(), conf)
   when declared(GC_setMaxPause):
     echo GC_getStatistics()
   msgQuit(int8(conf.errorCounter > 0))
+]#

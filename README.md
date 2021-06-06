@@ -11,7 +11,10 @@ All additional code is prepended with the `#OMNI` comment.
 1) On failed compilation, it does not `quit`, but it uses `setjmp` and `longjmp` to implement a low-level
 `try` / `catch` mechanism. Check the `compiler/omni/omni_nim_compiler.nim` folder for the implementation of the `omniNimCompile` function.
 
-2) Disable `stdin` handling. All `conf` settings need to be manually assigned via code. 
+2) Disabled `stdin` handling. All `conf` settings need to be manually assigned via code. 
+
+3) Disabled the need for `-d:selftest`, which would run the compiler cmd line interface in
+`compiler/nim.nim`.
 
 ## License
 

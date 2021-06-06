@@ -33,9 +33,16 @@
 # This file contains simplified versions of Nim's compile function. The entry point for compilation
 # is omniNimCompile.
 
-include ../nim
-import omni_setjmp
-import omni_capture_stdout
+import
+  ../commands, ../options, #[ ../msgs, ]#
+  #[ ../extccomp, strutils, ]# os, ../main, #[ parseopt, ]#
+  ../idents, #[ ../lineinfos, ]# ../cmdlinehelper,
+  ../pathutils, ../modulegraphs
+
+import omni_setjmp, omni_capture_stdout
+
+#Like processCmdLine in nim.nim, without actually parsing
+proc processCmdLine(pass: TCmdLinePass, cmd: string; config: ConfigRef) = discard
 
 #Like processCmdLineAndProjectPath but without processCmdLine (which would read stdin, blocking
 #execution)
