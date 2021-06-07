@@ -41,5 +41,8 @@ export msgs
 import omninim/omninim/compiler/lineinfos
 export lineinfos
 
+import omninim/omninim/compiler/nimblecmd
+export nimblecmd
+
 import omninim/omninim/compiler/omni/omni_nim_compiler
 export omni_nim_compiler
