@@ -45,12 +45,9 @@ import omni_setjmp
 proc processCmdLine(pass: TCmdLinePass, cmd: string; config: ConfigRef) = discard
 
 #Like processCmdLineAndProjectPath but without processCmdLine (which would read stdin, blocking
-#execution)
+#execution) and simplidief projectName handling
 proc processProjectPath*(self: NimProg, conf: ConfigRef) =
-  # self.processCmdLine(passCmd1, "", conf)
-  if self.supportsStdinFile and conf.projectName == "-":
-    handleStdinInput(conf)
-  elif conf.projectName != "":
+  if conf.projectName != "":
     try:
       conf.projectFull = canonicalizePath(conf, AbsoluteFile conf.projectName)
     except OSError:
