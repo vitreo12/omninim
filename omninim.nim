@@ -35,5 +35,11 @@ export options
 import omninim/omninim/compiler/condsyms
 export condsyms
 
+import omninim/omninim/compiler/msgs
+export msgs
+
+import omninim/omninim/compiler/lineinfos
+export lineinfos
+
 import omninim/omninim/compiler/omni/omni_nim_compiler
 export omni_nim_compiler
