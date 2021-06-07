@@ -65,13 +65,9 @@ proc processProjectPath*(self: NimProg, conf: ConfigRef) =
 #Simplified handleCmdLine without stdin support and commandLine checks.
 #returns false for succes, true for failure.
 proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : bool =
-
-  # write to conf.compilationOutput
+  # write to conf.compilationOutput and not to stdout or stderr
   incl(conf.globalOptions, {optCompilationOutput}) 
-  excl(conf.globalOptions, {optStdout})
-
-  #--colors:off
-  excl(conf.globalOptions, {optUseColors})
+  excl(conf.globalOptions, {optUseColors}) #--colors:off
 
   let self = NimProg(
     supportsStdinFile: false, #it is true here for normal nim
