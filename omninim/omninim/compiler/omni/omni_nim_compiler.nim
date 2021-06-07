@@ -61,7 +61,9 @@ proc processProjectPath*(self: NimProg, conf: ConfigRef) =
 
 #Simplified handleCmdLine without stdin support and commandLine checks.
 #returns false for succes, true for failure.
-proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : bool =
+proc omniNimCompile*(conf: ConfigRef) : bool =
+  let cache = newIdentCache()
+
   # write to conf.compilationOutput and not to stdout or stderr
   incl(conf.globalOptions, {optCompilationOutput}) 
   excl(conf.globalOptions, {optUseColors}) #--colors:off
