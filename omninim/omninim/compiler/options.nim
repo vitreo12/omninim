@@ -102,6 +102,9 @@ type                          # please make sure we have under 32 options
     optSourcemap
     optProfileVM              # enable VM profiler
     optEnableDeepCopy         # ORC specific: enable 'deepcopy' for all types.
+    
+    #OMNI
+    optCompilationOutput      # write errors to conf.compilationOutput
 
   TGlobalOptions* = set[TGlobalOption]
 
@@ -332,6 +335,9 @@ type
                                 severity: Severity) {.closure, gcsafe.}
     cppCustomNamespace*: string
     vmProfileData*: ProfileData
+
+    #OMNI
+    compilationOutput* : string
 
     #OMNI
     omniJmpBuf* : Omni_JmpBuf

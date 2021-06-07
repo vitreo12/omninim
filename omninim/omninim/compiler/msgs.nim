@@ -19,6 +19,12 @@ import omni/omni_setjmp
 type InstantiationInfo* = typeof(instantiationInfo())
 template instLoc(): InstantiationInfo = instantiationInfo(-2, fullPaths = true)
 
+#OMNI
+template flushDotCompilationOutput(conf) =
+  if conf.lastMsgWasDot:
+    conf.lastMsgWasDot = false
+    conf.compilationOutput.add("\n")
+
 template flushDot(conf, stdorr) =
   ## safe to call multiple times
   if conf.lastMsgWasDot:
@@ -306,6 +312,13 @@ proc msgWriteln*(conf: ConfigRef; s: string, flags: MsgFlags = {}) =
   #if conf.cmd == cmdIdeTools and optCDebug notin gGlobalOptions: return
   if not isNil(conf.writelnHook) and msgSkipHook notin flags:
     conf.writelnHook(s)
+  
+  #OMNI
+  elif optCompilationOutput in conf.globalOptions:
+    if eStdErr in conf.m.errorOutputs or eStdOut in conf.m.errorOutputs:
+      flushDotCompilationOutput(conf)
+      conf.compilationOutput.add(s & "\n") 
+
   elif optStdout in conf.globalOptions or msgStdout in flags:
     if eStdOut in conf.m.errorOutputs:
       flushDot(conf, stdout)
@@ -351,6 +364,13 @@ template callWritelnHook(args: varargs[string, `$`]) =
 
 proc msgWrite(conf: ConfigRef; s: string) =
   if conf.m.errorOutputs != {}:
+    
+    #OMNI
+    if optCompilationOutput in conf.globalOptions:
+      conf.compilationOutput.add(s)
+      conf.lastMsgWasDot = true
+      return
+
     let stdOrr =
       if optStdout in conf.globalOptions:
         stdout
@@ -360,9 +380,22 @@ proc msgWrite(conf: ConfigRef; s: string) =
     flushFile(stdOrr)
     conf.lastMsgWasDot = true # subsequent writes need `flushDot`
 
+#OMNI
+proc writeLineCompilationOutput(str : var string, args: varargs[string, `$`]) {.inline.} =
+  for arg in items(args):
+    str.add(arg)
+  str.add("\n")
+
 template styledMsgWriteln*(args: varargs[typed]) =
   if not isNil(conf.writelnHook):
     callIgnoringStyle(callWritelnHook, nil, args)
+  
+  #OMNI
+  elif optCompilationOutput in conf.globalOptions:
+    if eStdErr in conf.m.errorOutputs or eStdOut in conf.m.errorOutputs:
+      flushDotCompilationOutput(conf)
+      callIgnoringStyle(writeLineCompilationOutput, conf.compilationOutput, args)
+
   elif optStdout in conf.globalOptions:
     if eStdOut in conf.m.errorOutputs:
       flushDot(conf, stdout)

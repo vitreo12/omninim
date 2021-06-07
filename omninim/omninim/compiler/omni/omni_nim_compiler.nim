@@ -39,7 +39,7 @@ import
   ../idents, #[ ../lineinfos, ]# ../cmdlinehelper,
   ../pathutils, ../modulegraphs
 
-import omni_setjmp, omni_capture_stdout
+import omni_setjmp
 
 #Like processCmdLine in nim.nim, without actually parsing
 proc processCmdLine(pass: TCmdLinePass, cmd: string; config: ConfigRef) = discard
@@ -64,10 +64,11 @@ proc processProjectPath*(self: NimProg, conf: ConfigRef) =
 
 #Simplified handleCmdLine without stdin support and commandLine checks.
 #returns false for succes, true for failure.
-proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_output : string, failure : bool] =
+proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : bool =
 
-  #--stdout:on
-  incl(conf.globalOptions, {optStdout}) 
+  # write to conf.compilationOutput
+  incl(conf.globalOptions, {optCompilationOutput}) 
+  excl(conf.globalOptions, {optStdout})
 
   #--colors:off
   excl(conf.globalOptions, {optUseColors})
@@ -79,21 +80,16 @@ proc omniNimCompile*(cache: IdentCache; conf: ConfigRef) : tuple[compilation_out
   self.initDefinesProg(conf, "nim_compiler")
   self.processProjectPath(conf)
   var graph = newModuleGraph(cache, conf)
-  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return ("", false)
+  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return true
 
-  var 
-    compilationOutput : string
-    failure : bool
+  var failure : bool
 
-  #In a future version, I could patch in a conf.compilationOutput variable, instead of doing this
-  #workaround to capture stdout.
-  captureStdout(compilationOutput):
-    #try
-    if not bool(omni_setjmp(conf.omniJmpBuf)):
-      mainCommand(graph)
-      failure = false
-    #catch
-    else:
-      failure = true
+  #try
+  if not bool(omni_setjmp(conf.omniJmpBuf)):
+    mainCommand(graph)
+    failure = false
+  #catch
+  else:
+    failure = true
 
-  return (compilationOutput, failure)
+  return failure
