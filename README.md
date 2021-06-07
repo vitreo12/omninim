@@ -13,7 +13,10 @@ All additional code is prepended with the `#OMNI` comment.
 
 2) Disabled `stdin` handling. All `conf` settings need to be manually assigned via code. 
 
-3) Disabled the need for `-d:selftest`, which would run the compiler cmd line interface in
+3) Disabled `stdout` and `stderr` handling. The output of compilation is assigned to the
+`conf.compilationOutput` variable.
+
+4) Disabled the need for `-d:selftest`, which would run the compiler cmd line interface in
 `compiler/nim.nim`.
 
 ## License
