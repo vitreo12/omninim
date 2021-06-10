@@ -20,29 +20,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import omninim/omninim/compiler/commands
+import omninim/compiler/commands
 export commands
 
-import omninim/omninim/compiler/pathutils
+import omninim/compiler/pathutils
 export pathutils
 
-import omninim/omninim/compiler/idents
+import omninim/compiler/idents
 export idents
 
-import omninim/omninim/compiler/options
+import omninim/compiler/options
 export options
 
-import omninim/omninim/compiler/condsyms
+import omninim/compiler/condsyms
 export condsyms
 
-import omninim/omninim/compiler/msgs
+import omninim/compiler/msgs
 export msgs
 
-import omninim/omninim/compiler/lineinfos
+import omninim/compiler/lineinfos
 export lineinfos
 
-import omninim/omninim/compiler/nimblecmd
+import omninim/compiler/nimblecmd
 export nimblecmd
 
-import omninim/omninim/compiler/omni/omni_nim_compiler
+import omninim/compiler/omni/omni_nim_compiler
 export omni_nim_compiler
