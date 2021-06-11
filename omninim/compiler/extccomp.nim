@@ -265,6 +265,15 @@ compiler envcc:
     cppXsupport: "",
     props: {hasGnuAsm})
 
+#OMNI
+compiler zigcc:
+  result = gcc() # Uses settings from GCC
+
+  result.name = "zigcc"
+  result.compilerExe = "zig"
+  result.compileTmpl = "cc -c $options $include -o $objfile $file"
+  result.buildLib = "zig ar rcs $libfile $objfiles"
+
 const
   CC*: array[succ(low(TSystemCC))..high(TSystemCC), TInfoCC] = [
     gcc(),
@@ -277,7 +286,9 @@ const
     envcc(),
     icl(),
     icc(),
-    clangcl()]
+    clangcl(),
+    #OMNI
+    zigcc()]
 
   hExt* = ".h"
 
