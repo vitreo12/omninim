@@ -272,6 +272,7 @@ compiler omnizigcc:
   result.name = "omnizigcc"
   result.compilerExe = "zig"
   result.compileTmpl = "cc -c $options $include -o $objfile $file"
+  result.linkTmpl = "cc $buildgui $builddll -o $exefile $objfiles $options"
   result.buildLib = "zig ar rcs $libfile $objfiles"
 
 const
