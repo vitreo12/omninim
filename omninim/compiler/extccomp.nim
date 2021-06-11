@@ -266,10 +266,10 @@ compiler envcc:
     props: {hasGnuAsm})
 
 #OMNI
-compiler zigcc:
+compiler omnizigcc:
   result = gcc() # Uses settings from GCC
 
-  result.name = "zigcc"
+  result.name = "omnizigcc"
   result.compilerExe = "zig"
   result.compileTmpl = "cc -c $options $include -o $objfile $file"
   result.buildLib = "zig ar rcs $libfile $objfiles"
@@ -288,7 +288,7 @@ const
     icc(),
     clangcl(),
     #OMNI
-    zigcc()]
+    omnizigcc()]
 
   hExt* = ".h"
 

@@ -189,7 +189,7 @@ type
 
   TSystemCC* = enum
     ccNone, ccGcc, ccNintendoSwitch, ccLLVM_Gcc, ccCLang, ccBcc, ccVcc,
-    ccTcc, ccEnv, ccIcl, ccIcc, ccClangCl, ccZigcc #OMNI
+    ccTcc, ccEnv, ccIcl, ccIcc, ccClangCl, ccOmniZigcc #OMNI
 
   ExceptionSystem* = enum
     excNone,   # no exception system selected yet
