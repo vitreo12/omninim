@@ -44,5 +44,8 @@ export lineinfos
 import omninim/compiler/nimblecmd
 export nimblecmd
 
+import omninim/compiler/platform
+export platform
+
 import omninim/compiler/omni/omni_nim_compiler
 export omni_nim_compiler
