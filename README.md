@@ -1,4 +1,4 @@
-# omninim v.0.4.1 - Nim v.1.4.8
+# omninim v.0.5.0 - Nim v.1.4.8
 
 Patched version of the Nim compiler in order to be embedded within the Omni audio DSL.
 
