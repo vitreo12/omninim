@@ -34,30 +34,30 @@
 # is omniNimCompile.
 
 import
-  ../commands, ../options, #[ ../msgs, ]#
-  #[ ../extccomp, strutils, ]# os, ../main, #[ parseopt, ]#
-  ../idents, #[ ../lineinfos, ]# ../cmdlinehelper,
-  ../pathutils, ../modulegraphs
+  ../commands, ../options, 
+  #[ os, ]# ../main, 
+  ../idents, ../cmdlinehelper,
+  #[ ../pathutils, ]# ../modulegraphs
 
 import omni_setjmp
 
 #Like processCmdLine in nim.nim, without actually parsing
 proc processCmdLine(pass: TCmdLinePass, cmd: string; config: ConfigRef) = discard
 
-#Like processCmdLineAndProjectPath but without processCmdLine (which would read stdin, blocking
-#execution) and simplidief projectName handling
-proc processProjectPath*(self: NimProg, conf: ConfigRef) =
-  if conf.projectName != "":
-    try:
-      conf.projectFull = canonicalizePath(conf, AbsoluteFile conf.projectName)
-    except OSError:
-      conf.projectFull = AbsoluteFile conf.projectName
-    let p = splitFile(conf.projectFull)
-    let dir = if p.dir.isEmpty: AbsoluteDir getCurrentDir() else: p.dir
-    conf.projectPath = AbsoluteDir canonicalizePath(conf, AbsoluteFile dir)
-    conf.projectName = p.name
-  else:
-    conf.projectPath = AbsoluteDir canonicalizePath(conf, AbsoluteFile getCurrentDir())
+#This would set correct projectPath, which omni already handles... After testing, this could
+#probably just be removed altogether
+proc processProjectPath*(self: NimProg, conf: ConfigRef) = discard
+  # if conf.projectName != "":
+  #   try:
+  #     conf.projectFull = canonicalizePath(conf, AbsoluteFile conf.projectName)
+  #   except OSError:
+  #     conf.projectFull = AbsoluteFile conf.projectName
+  #   let p = splitFile(conf.projectFull)
+  #   let dir = if p.dir.isEmpty: AbsoluteDir getCurrentDir() else: p.dir
+  #   conf.projectPath = AbsoluteDir canonicalizePath(conf, AbsoluteFile dir)
+  #   conf.projectName = p.name
+  # else:
+  #   conf.projectPath = AbsoluteDir canonicalizePath(conf, AbsoluteFile getCurrentDir())
 
 #Simplified handleCmdLine without stdin support and commandLine checks.
 #returns false for succes, true for failure.
@@ -75,7 +75,9 @@ proc omniNimCompile*(conf: ConfigRef) : bool =
   self.initDefinesProg(conf, "nim_compiler")
   self.processProjectPath(conf)
   var graph = newModuleGraph(cache, conf)
-  if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return true
+
+  # This was causing segfaults... It is useless anyway as omni does not use nim.cfg / config.nims
+  # if not self.loadConfigsAndRunMainCommand(cache, conf, graph): return true
 
   var failure : bool
 
