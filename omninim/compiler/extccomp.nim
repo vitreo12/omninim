@@ -678,7 +678,7 @@ proc getLinkCmd(conf: ConfigRef; output: AbsoluteFile,
                                             "objfiles", objfiles]
     #OMNI
     if conf.cCompiler == ccOmniZigcc:
-      result = joinPath(conf.cCompilerPath, result)
+      result = conf.cCompilerPath & result
   else:
     var linkerExe = getConfigVar(conf, conf.cCompiler, ".linkerexe")
     if linkerExe.len == 0: linkerExe = getLinkerExe(conf, conf.cCompiler)
