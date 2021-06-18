@@ -159,6 +159,7 @@ proc checkModuleName*(conf: ConfigRef; n: PNode; doLocalError=true): FileIndex =
   if fullPath.isEmpty:
     if doLocalError:
       let m = if modulename.len > 0: modulename else: $n
+      echo "modulepaths"
       localError(conf, n.info, "cannot open file: " & m)
     result = InvalidFileIdx
   else:

@@ -21,6 +21,7 @@ proc opSlurp*(file: string, info: TLineInfo, module: PSym; conf: ConfigRef): str
     discard conf.fileInfoIdx(AbsoluteFile filename)
     appendToModule(module, newTreeI(nkIncludeStmt, info, newStrNode(nkStrLit, filename)))
   except IOError:
+    echo "vmdeps"
     localError(conf, info, "cannot open file: " & file)
     result = ""
 

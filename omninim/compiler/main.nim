@@ -159,6 +159,7 @@ proc commandScan(cache: IdentCache, config: ConfigRef) =
       if tok.tokType == tkEof: break
     closeLexer(L)
   else:
+    echo "main"
     rawMessage(config, errGenerated, "cannot open file: " & f.string)
 
 const
