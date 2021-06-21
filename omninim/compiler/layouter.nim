@@ -251,7 +251,6 @@ proc writeOut*(em: Emitter, content: string)  =
     return
   var f = llStreamOpen(outFile, fmWrite)
   if f == nil:
-    echo "layouter"
     rawMessage(em.config, errGenerated, "cannot open file: " & outFile.string)
     return
   f.llStreamWrite content

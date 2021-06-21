@@ -1654,7 +1654,6 @@ proc renderModule*(n: PNode, infile, outfile: string,
     write(f, g.buf)
     close(f)
   else:
-    echo "renderer"
     rawMessage(g.config, errGenerated, "cannot open file: " & outfile)
 
 proc initTokRender*(r: var TSrcGen, n: PNode, renderFlags: TRenderFlags = {}) =
