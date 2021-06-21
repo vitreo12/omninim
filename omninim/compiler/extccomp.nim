@@ -268,12 +268,17 @@ compiler envcc:
 #OMNI
 compiler omnizigcc:
   result = gcc() # Uses settings from GCC
-
   result.name = "omnizigcc"
   result.compilerExe = "zig"
   result.compileTmpl = "cc -c $options $include -o $objfile $file"
   result.linkTmpl = "cc $buildgui $builddll -o $exefile $objfiles $options"
   result.buildLib = "zig ar rcs $libfile $objfiles"
+
+#OMNI
+compiler omnitcc:
+  result.name = "omnitcc"
+  result.compilerExe = "tcc"
+  result.buildLib = "tcc -ar rcs $libfile $objfiles"
 
 const
   CC*: array[succ(low(TSystemCC))..high(TSystemCC), TInfoCC] = [
@@ -289,7 +294,8 @@ const
     icc(),
     clangcl(),
     #OMNI
-    omnizigcc()]
+    omnizigcc(),
+    omnitcc()]
 
   hExt* = ".h"
 
@@ -677,7 +683,7 @@ proc getLinkCmd(conf: ConfigRef; output: AbsoluteFile,
     result = CC[conf.cCompiler].buildLib % ["libfile", quoteShell(output),
                                             "objfiles", objfiles]
     #OMNI
-    if conf.cCompiler == ccOmniZigcc:
+    if conf.cCompiler == ccOmniZigcc or conf.cCompiler == ccOmniTcc:
       result = conf.cCompilerPath  & "/" & result
   else:
     var linkerExe = getConfigVar(conf, conf.cCompiler, ".linkerexe")
