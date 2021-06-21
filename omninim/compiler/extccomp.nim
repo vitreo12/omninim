@@ -276,8 +276,10 @@ compiler omnizigcc:
 
 #OMNI
 compiler omnitcc:
+  result = gcc() # Uses settings from GCC
   result.name = "omnitcc"
   result.compilerExe = "tcc"
+  # result.linkTmpl = "-o $exefile $options $buildgui $builddll $objfiles" #This is the tcc one... but it doesn't seem necessary
   result.buildLib = "tcc -ar rcs $libfile $objfiles"
 
 const
