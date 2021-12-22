@@ -19,6 +19,8 @@ All additional code is prepended with the `#OMNI` comment.
 4) Disabled the need for `-d:selftest`, which would run the compiler cmd line interface in
 `compiler/nim.nim`.
 
+5) Added the `tcc` and `zig` compiler options.
+
 ## License
 
 ### Nim
